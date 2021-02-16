@@ -138,8 +138,8 @@ export default class Brick extends Viewable {
    * spec objects
    * @return {Brick} Fluent interface
    */
-  addSettings (fieldsOrSpecs) {
-    this._settingsForm.addFields(fieldsOrSpecs)
+  async addSettings (fieldsOrSpecs) {
+    await this._settingsForm.addFields(fieldsOrSpecs)
     return this
   }
 
@@ -158,8 +158,8 @@ export default class Brick extends Viewable {
    * @throws {Error} If field name is already assigned.
    * @return {Brick} Fluent interface
    */
-  addSetting (fieldOrSpec) {
-    this._settingsForm.addField(fieldOrSpec)
+  async addSetting (fieldOrSpec) {
+    await this._settingsForm.addField(fieldOrSpec)
     return this
   }
 
@@ -279,14 +279,14 @@ export default class Brick extends Viewable {
    * @param {BrickView} view Sender
    * @param {string} name Menu item name
    */
-  viewMenuItemDidClick (view, name) {
+  async viewMenuItemDidClick (view, name) {
     // Track action
     EventManager.trigger('brickMenuItemClick', { brick: this, menuItem: name })
 
     // Decide what to do
     switch (name) {
       case 'remove':
-        this.getPipe().removeBrick(this)
+        await this.getPipe().removeBrick(this)
         break
       case 'hide':
         this.setHidden(true)
@@ -295,7 +295,7 @@ export default class Brick extends Viewable {
         // TODO Create a UI to communicate that brick duplication is not
         // possible with invalid settings.
         if (this.isValid()) {
-          this.getPipe().duplicateBrick(this)
+          await this.getPipe().duplicateBrick(this)
         }
         break
       case 'randomize':
@@ -370,7 +370,7 @@ export default class Brick extends Viewable {
    * @throws {Error} If data is malformed.
    * @return {Brick} Extracted brick
    */
-  static extract (data, brickFactory) {
+  static async extract (data, brickFactory) {
     // Verify name
     if (typeof data.name !== 'string') {
       throw new Error(
@@ -386,7 +386,7 @@ export default class Brick extends Viewable {
     }
 
     // Create brick instance
-    const brick = brickFactory.create(name)
+    const brick = await brickFactory.create(name)
 
     // Handle title property
     if (data.title !== undefined) {
@@ -415,7 +415,7 @@ export default class Brick extends Viewable {
         throw new Error(
           `Optional brick property 'reverse' is expected to be of type 'boolean'`)
       }
-      brick.setReverse(data.reverse)
+      await brick.setReverse(data.reverse)
     }
 
     // Apply setting values

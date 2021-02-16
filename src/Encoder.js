@@ -23,6 +23,10 @@ export default class Encoder extends Brick {
     this._lastTranslationMeta = null
   }
 
+  async initAsync() {
+    return this
+  }
+
   /**
    * Prepares and performs encode on given content.
    * @param {number[]|string|Uint8Array|Chain} content
@@ -112,11 +116,11 @@ export default class Encoder extends Brick {
    * @param {boolean} reverse
    * @return {Encoder} Fluent interface
    */
-  setReverse (reverse) {
+  async setReverse (reverse) {
     if (this._reverse !== reverse) {
       this._reverse = reverse
       this.updateView()
-      this.hasPipe() && this.getPipe().encoderDidReverse(this, reverse)
+      this.hasPipe() && await this.getPipe().encoderDidReverse(this, reverse)
     }
     return this
   }
@@ -172,9 +176,9 @@ export default class Encoder extends Brick {
    * Creates a copy of this brick.
    * @return {Brick} Brick copy instance
    */
-  copy () {
+  async copy () {
     const copy = super.copy()
-    copy.setReverse(this.isReverse())
+    await copy.setReverse(this.isReverse())
     return copy
   }
 
@@ -281,9 +285,9 @@ export default class Encoder extends Brick {
    * Triggered when the encoder has been reversed.
    * @param {EncoderView} view Sender
    */
-  viewDidReverse (view) {
+  async viewDidReverse (view) {
     // Reverse self
-    this.setReverse(!this.isReverse())
+    await this.setReverse(!this.isReverse())
     // Track action
     EventManager.trigger('encoderReverse', {
       encoder: this,

@@ -27,12 +27,9 @@ export default class TrifidCipherEncoder extends Encoder {
     return meta
   }
 
-  /**
-   * Constructor
-   */
-  constructor () {
-    super()
-    this.addSettings([
+  async initAsync() {
+    await super.initAsync()
+    await this.addSettings([
       {
         name: 'key',
         type: 'text',
@@ -49,6 +46,8 @@ export default class TrifidCipherEncoder extends Encoder {
         min: 2
       }
     ])
+
+    return this
   }
 
   /**

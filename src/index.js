@@ -35,7 +35,7 @@ export { default as Viewer } from './Viewer'
 if (EnvUtil.isBrowser() &&
     document.querySelector('script[data-cryptii-init]') !== null) {
   // Define app initialization in the browser
-  const init = () => {
+  const init = async () => {
     // Read optional pipe content
     const $pipeData = document.querySelector('script[data-cryptii-pipe]')
     const pipeData = $pipeData !== null ? JSON.parse($pipeData.innerHTML) : null
@@ -46,13 +46,15 @@ if (EnvUtil.isBrowser() &&
 
     // Configure app and bootstrap it
     const app = new App(config)
-    app.run(pipeData)
+    await app.run(pipeData)
   }
+
+  const initSync = () => init().catch(err => { throw err })
 
   // Trigger initialization when the DOM is ready
   if (document.readyState !== 'loading') {
-    init()
+    initSync()
   } else {
-    window.addEventListener('DOMContentLoaded', init)
+    window.addEventListener('DOMContentLoaded', initSync)
   }
 }

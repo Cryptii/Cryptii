@@ -33,12 +33,9 @@ export default class IntegerEncoder extends Encoder {
     return meta
   }
 
-  /**
-   * Constructor
-   */
-  constructor () {
-    super()
-    this.addSettings([
+  async initAsync() {
+    await super.initAsync()
+    await this.addSettings([
       {
         name: 'format',
         type: 'enum',
@@ -85,6 +82,8 @@ export default class IntegerEncoder extends Encoder {
         priority: 10
       }
     ])
+
+    return this
   }
 
   /**

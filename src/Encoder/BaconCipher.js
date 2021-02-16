@@ -50,12 +50,9 @@ export default class BaconCipherEncoder extends Encoder {
     return meta
   }
 
-  /**
-   * Constructor
-   */
-  constructor () {
-    super()
-    this.addSettings([
+  async initAsync() {
+    await super.initAsync()
+    await this.addSettings([
       {
         name: 'variant',
         type: 'enum',
@@ -88,6 +85,8 @@ export default class BaconCipherEncoder extends Encoder {
         validateValue: this.validateLetterSettingValue.bind(this)
       }
     ])
+
+    return this
   }
 
   /**

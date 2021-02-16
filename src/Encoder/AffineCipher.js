@@ -23,16 +23,13 @@ export default class AffineCipherEncoder extends Encoder {
     return meta
   }
 
-  /**
-   * Constructor
-   */
-  constructor () {
-    super()
+  async initAsync() {
+    await super.initAsync()
 
     // Linear function
     // f(x) = ax + b
 
-    this.addSettings([
+    await this.addSettings([
       {
         name: 'a',
         type: 'number',
@@ -83,6 +80,8 @@ export default class AffineCipherEncoder extends Encoder {
         randomizable: false
       }
     ])
+
+    return this
   }
 
   /**

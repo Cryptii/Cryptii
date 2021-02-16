@@ -1,6 +1,7 @@
 
 import Encoder from '../Encoder'
 import StringUtil from '../StringUtil'
+import ResourceLoader from '../ResourceLoader'
 
 const meta = {
   name: 'spelling-alphabet',
@@ -9,117 +10,10 @@ const meta = {
   type: 'encoder'
 }
 
-const alphabetSpecs = [
-  /* eslint-disable no-multi-spaces */
-  {
-    name: 'nato',
-    label: 'NATO/ICAO phonetic alphabet',
-    characters: 'abcdefghijklmnopqrstuvwxxyz0123456789.',
-    words: [
-      'Alfa',     'Bravo',    'Charlie',  'Delta',    'Echo',     'Foxtrot',
-      'Golf',     'Hotel',    'India',    'Juliett',  'Kilo',     'Lima',
-      'Mike',     'November', 'Oscar',    'Papa',     'Quebec',   'Romeo',
-      'Sierra',   'Tango',    'Uniform',  'Victor',   'Whiskey',  'X-ray',
-      'Xray',     'Yankee',   'Zulu',     'Zero',     'One',      'Two',
-      'Three',    'Four',     'Five',     'Six',      'Seven',    'Eight',
-      'Nine',     'Stop'
-    ],
-    spaceWord: '(space)'
-  },
-  {
-    name: 'dutch',
-    label: 'Dutch spelling alphabet',
-    characters: [
-      'a',  'b',  'c',  'd',  'e',  'f',  'g',  'h',  'ij', 'ij', 'i',  'j',
-      'j',  'k',  'l',  'l',  'm',  'n',  'o',  'p',  'q',  'q',  'r',  'r',
-      's',  't',  'u',  'v',  'w',  'x',  'y',  'z',  '0',  '1',  '2',  '3',
-      '4',  '5',  '6',  '7',  '8',  '9'
-    ],
-    words: [
-      'Anton',      'Bernhard',   'Cornelis',   'Dirk',       'Eduard',
-      'Ferdinand',  'Gerard',     'Hendrik',    'IJmuiden',   'IJsbrand',
-      'Izaak',      'Johan',      'Jacob',      'Karel',      'Lodewijk',
-      'Leo',        'Maria',      'Nico',       'Otto',       'Pieter',
-      'Quirinius',  'Quinten',    'Richard',    'Rudolf',     'Simon',
-      'Theodoor',   'Utrecht',    'Victor',     'Willem',     'Xantippe',
-      'Ypsilon',    'Zacharias',  'Nul',        'Een',        'Twee',
-      'Drie',       'Vier',       'Vijf',       'Zes',        'Zeven',
-      'Acht',       'Negen'
-    ],
-    spaceWord: '(spatiebalk)'
-  },
-  {
-    name: 'german',
-    label: 'German spelling alphabet',
-    characters: 'abcdefghijkklmnopqrsstuvwxxyzzäööüüßß0123456789',
-    words: [
-      'Anton',      'Berta',      'Cäsar',      'Dora',       'Emil',
-      'Friedrich',  'Gustav',     'Heinrich',   'Ida',        'Julius',
-      'Kaufmann',   'Konrad',     'Ludwig',     'Martha',     'Nordpol',
-      'Otto',       'Paula',      'Quelle',     'Richard',    'Samuel',
-      'Siegfried',  'Theodor',    'Ulrich',     'Viktor',     'Wilhelm',
-      'Xanthippe',  'Xaver',      'Ypsilon',    'Zacharias',  'Zürich',
-      'Ärger',      'Ökonom',     'Österreich', 'Übermut',    'Übel',
-      'Eszett',     'Scharfes S', 'Null',       'Eins',       'Zwei',
-      'Drei',       'Vier',       'Fünf',       'Sechs',      'Sieben',
-      'Acht',       'Neun'
-    ],
-    spaceWord: '(Leertaste)'
-  },
-  {
-    name: 'swedish',
-    label: 'Swedish Armed Forces\' radio alphabet',
-    characters: 'abcdefghijklmnopqrstuvwxyzåäö0123456789',
-    words: [
-      'Adam',       'Bertil',     'Caesar',     'David',      'Erik',
-      'Filip',      'Gustav',     'Helge',      'Ivar',       'Johan',
-      'Kalle',      'Ludvig',     'Martin',     'Niklas',     'Olof',
-      'Petter',     'Qvintus',    'Rudolf',     'Sigurd',     'Tore',
-      'Urban',      'Viktor',     'Wilhelm',    'Xerxes',     'Yngve',
-      'Zäta',       'Åke',        'Ärlig',      'Östen',      'Nolla',
-      'Ett',        'Tvåa',       'Trea',       'Fyra',       'Femma',
-      'Sexa',       'Sju',        'Åtta',       'Nia'
-    ],
-    spaceWord: '(mellanslag)'
-  },
-  {
-    name: 'russian',
-    label: 'Russian spelling alphabet (official, excludes Ё)',
-    characters: 'абвгдежзийклмнопрстуфхцчшщъыьэюя0123456789.',
-    words: [
-      'Анна',       'Борис',        'Василий', 'Григорий',    'Дмитрий',
-      'Елена',      'Женя',         'Зинаида', 'Иван',        'Иван краткий',
-      'Константин', 'Леонид',       'Михаил',  'Николай',     'Ольга',
-      'Павел',      'Роман',        'Семён',   'Татьяна',     'Ульяна',
-      'Фёдор',      'Харитон',      'Цапля',   'Человек',     'Шура',
-      'Щука',       'Твёрдый знак', 'Еры',     'Мягкий знак', 'Эхо',
-      'Юрий',       'Яков',         'Ноль',    'Один',        'Два',
-      'Три',        'Четыре',       'Пять',    'Шесть',       'Семь',
-      'Восемь',     'Девять',       'Точка'
-    ],
-    spaceWord: '(пробел)'
-  },
-  {
-    name: 'russian-unofficial',
-    label: 'Russian spelling alphabet (unofficial, includes Ё)',
-    characters: 'абвгдеёжзийклмнопрстуфхцчшщъыьэюя0123456789.',
-    words: [
-      'Антон',  'Борис',    'Василий',      'Галина', 'Дмитрий',
-      'Елена',  'Ёлка',     'Жук',          'Зоя',    'Иван',
-      'Йот',    'Киловатт', 'Леонид',       'Мария',  'Николай',
-      'Ольга',  'Павел',    'Радио',        'Сергей', 'Тамара',
-      'Ульяна', 'Фёдор',    'Харитон',      'Центр',  'Человек',
-      'Шура',   'Щука',     'Твёрдый знак', 'Игрек',  'Мягкий знак',
-      'Эмма',   'Юрий',     'Яков',         'Ноль',   'Один',
-      'Два',    'Три',      'Четыре',       'Пять',   'Шесть',
-      'Семь',   'Восемь',   'Девять',       'Точка'
-    ],
-    spaceWord: '(пробел)'
-  }
-  /* eslint-enable no-multi-spaces */
-]
-
 const defaultSpaceWord = '(space)'
+
+const wrapInArray = obj => obj === undefined || obj === null ? [] :
+  Array.isArray(obj) ? [...obj] : [obj]
 
 /**
  * Encoder brick translating characters into words of given spelling alphabet.
@@ -129,28 +23,51 @@ export default class SpellingAlphabetEncoder extends Encoder {
    * Returns brick meta.
    * @return {object}
    */
-  static getMeta () {
+  static getMeta() {
     return meta
   }
 
-  /**
-   * Constructor
-   */
-  constructor () {
+  constructor (alphabetSpecs) {
     super()
+    this._alphabetSpecs = alphabetSpecs
+  }
+
+  async initAsync() {
+    await super.initAsync()
+
+    if (this._alphabetSpecs === undefined) {
+      this._alphabetSpecs = await ResourceLoader.loadJson('SpellingAlphabets.json')
+    }
+
     this._characterMap = {}
     this._wordMap = {}
 
-    this.addSetting({
+    await this.addSetting({
       name: 'alphabet',
       type: 'enum',
-      elements: alphabetSpecs.map(alphabet => alphabet.name),
-      labels: alphabetSpecs.map(alphabet => alphabet.label),
+      elements: this._alphabetSpecs.map(alphabet => alphabet.name),
+      labels: this._alphabetSpecs.map(alphabet => alphabet.label),
       randomizable: false,
       style: 'radio'
     })
 
-    this.buildTranslationMap()
+    await this.addSetting({
+      name: 'variant',
+      type: 'enum',
+      elements: [''],
+      labels: [''],
+      randomizable: false
+    })
+
+    const defaultAlphabet = this._alphabetSpecs.find(alphabet => alphabet.isDefault === true)
+
+    if (defaultAlphabet !== undefined) {
+      this.setSettingValue('alphabet', defaultAlphabet.name)
+    } else {
+      this.buildTranslationMap()
+    }
+
+    return this
   }
 
   /**
@@ -160,7 +77,7 @@ export default class SpellingAlphabetEncoder extends Encoder {
    * @param {boolean} isEncode True for encoding, false for decoding
    * @return {number[]|string|Uint8Array|Chain|Promise} Resulting content
    */
-  performTranslate (content, isEncode) {
+  performTranslate(content, isEncode) {
     // Retrieve content string and normalize its whitespaces
     const string = StringUtil.normalizeWhitespaces(content.getString())
 
@@ -206,6 +123,9 @@ export default class SpellingAlphabetEncoder extends Encoder {
       case 'alphabet':
         this.buildTranslationMap()
         break
+      case 'variant':
+        this._applyVariantOverrides()
+        break;
     }
   }
 
@@ -215,45 +135,119 @@ export default class SpellingAlphabetEncoder extends Encoder {
    * @return {SpellingAlphabetEncoder} Fluent interface
    */
   buildTranslationMap () {
-    const name = this.getSettingValue('alphabet')
-    const spec = alphabetSpecs.find(spec => spec.name === name)
-    if (spec === undefined) {
-      throw new Error(`Alphabet with name '${name}' is not defined`)
+    const spec = this._getAlphabetSpec()
+
+    const variantSetting = this.getSetting('variant')
+    const universalVariant = {
+      name: 'universal',
+      label: 'Universal',
+      description: 'Uses the most commonly used word for encoding\nCombines all known words for decoding.'
+    }
+    const variants = [universalVariant, ...(spec.variants || [])]
+
+    variantSetting.setElements(variants.map(v => v.name), variants.map(v => v.label), variants.map(v => v.description), false)
+    variantSetting.setValue('universal')
+    this._applyVariantOverrides()
+
+    return this
+  }
+
+  _getAlphabetSpec() {
+      const alphabetName = this.getSettingValue('alphabet');
+      const spec = this._alphabetSpecs.find(spec => spec.name === alphabetName);
+      if (spec === undefined) {
+        throw new Error(`Alphabet with name '${alphabetName}' is not defined`);
+      }
+      return spec;
+  }
+
+  _applyVariantOverrides () {
+    const spec = this._getAlphabetSpec()
+    const alphabetName = this.getSettingValue('alphabet');
+    const variantName = this.getSettingValue('variant');
+    const characterMap = {};
+    const wordMap = {}
+
+    for (let mapping of spec.mappings) {
+      const characters = wrapInArray(mapping.character)
+      let words = wrapInArray(mapping.word)
+      const overrides = wrapInArray(mapping.override)
+
+      const processVariant = currentVariantName => {
+        let primaryWord = undefined
+        let secondaryWords = []
+
+        for (let override of overrides) {
+          if (variantName == 'universal' && override.skipInUniversalEncoder) {
+            continue
+          }
+          const overrideWords = wrapInArray(override.word)
+          const variants = wrapInArray(override.variant).filter(v => v === currentVariantName || v.name === currentVariantName)
+          if (variants.length > 1) {
+            throw new Error(`Alphabet with name '${alphabetName}' has override with word '${overrideWords[0]}' where variant '${currentVariantName}' specified more than once`);
+          }
+          const variant = variants[0]
+          if (!variant) {
+            continue
+          }
+          const isPrimary = typeof variant === 'string' || variant.primary === true
+          if (isPrimary) {
+            if (primaryWord === undefined) {
+              primaryWord = overrideWords[0] || null
+              secondaryWords.push(...overrideWords.slice(1))
+            } else {
+              throw new Error(`Alphabet with name '${alphabetName}' has multiple primary words for variant '${currentVariantName}'. Some of them: '${primaryWord}', '${overrideWords[0]}'`);
+            }
+          } else {
+            secondaryWords.push(...overrideWords)
+          }
+        }
+
+        return [primaryWord, secondaryWords]
+      }
+
+      if (variantName === 'universal') {
+        for (let currentVariantName of wrapInArray(spec.variants).map(v => v.name)) {
+          let [primaryWord, secondaryWords] = processVariant(currentVariantName)
+          if (primaryWord !== undefined && primaryWord !== null) {
+            words.push(primaryWord)
+          }
+          words.push(...secondaryWords)
+        }
+      }
+      else {
+        let [primaryWord, secondaryWords] = processVariant(variantName)
+        if (primaryWord === null) {
+          words = []
+        } else if (primaryWord !== undefined) {
+          words = [primaryWord]
+        }
+        words.push(...secondaryWords)
+      }
+
+      if (characters.length > 0 && words.length > 0) {
+        for (let character of characters) {
+          if (characterMap[character] !== undefined && characterMap[character] !== words[0]) {
+            throw new Error(`Alphabet with name '${alphabetName}' has multiple mappings with character '${character}'`)
+          }
+          characterMap[character] = words[0]
+        }
+
+        for (let word of words) {
+          if (wordMap[word] !== undefined && wordMap[word] !== characters[0]) {
+            throw new Error(`Alphabet with name '${alphabetName}' has multiple mappings with word '${word}'`)
+          }
+          wordMap[word] = characters[0]
+        }
+      }
     }
 
-    // Read spec
-    const characters =
-      typeof spec.characters === 'string'
-        ? spec.characters.split('')
-        : spec.characters
-
-    const words = spec.words
-
-    // Build encode map
-    const characterMap = {}
-    characters.forEach((character, index) => {
-      if (characterMap[character] === undefined) {
-        characterMap[character] = words[index]
-      }
-    })
-
-    // Build decode map
-    const wordMap = {}
-    words.forEach((word, index) => {
-      word = word.toLowerCase()
-      if (wordMap[word] === undefined) {
-        wordMap[word] = characters[index]
-      }
-    })
-
-    const spaceWord = spec.spaceWord || defaultSpaceWord
-
-    // Add space character
-    characterMap[' '] = spaceWord
-    wordMap[spaceWord] = ' '
+    if (characterMap[' '] === undefined) {
+      characterMap[' '] = defaultSpaceWord
+      wordMap[defaultSpaceWord] = ' '
+    }
 
     this._characterMap = characterMap
     this._wordMap = wordMap
-    return this
   }
 }

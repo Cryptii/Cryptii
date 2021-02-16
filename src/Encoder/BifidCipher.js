@@ -27,12 +27,9 @@ export default class BifidCipherEncoder extends Encoder {
     return meta
   }
 
-  /**
-   * Constructor
-   */
-  constructor () {
-    super()
-    this.addSetting({
+  async initAsync() {
+    await super.initAsync()
+    await this.addSetting({
       name: 'key',
       type: 'text',
       value: '',
@@ -42,7 +39,7 @@ export default class BifidCipherEncoder extends Encoder {
     })
 
     // Create internal Polybius square encoder instance
-    this._polybiusSquare = new PolybiusSquareEncoder()
+    this._polybiusSquare = await new PolybiusSquareEncoder().initAsync()
     this._polybiusSquare.setSettingValues({
       alphabet: alphabet,
       rows: '12345',
@@ -51,6 +48,7 @@ export default class BifidCipherEncoder extends Encoder {
       caseSensitivity: false,
       includeForeignChars: false
     })
+    return this;
   }
 
   /**

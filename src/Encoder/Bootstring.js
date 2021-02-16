@@ -27,12 +27,9 @@ export default class BootstringEncoder extends Encoder {
     return meta
   }
 
-  /**
-   * Constructor
-   */
-  constructor () {
-    super()
-    this.addSettings([
+  async initAsync() {
+    await super.initAsync()
+    await this.addSettings([
       {
         name: 'basicRangeStart',
         label: 'Basic Start',
@@ -145,6 +142,8 @@ export default class BootstringEncoder extends Encoder {
         randomizable: false
       }
     ])
+
+    return this
   }
 
   /**

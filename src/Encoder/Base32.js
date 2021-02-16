@@ -67,12 +67,9 @@ export default class Base32Encoder extends Encoder {
     return meta
   }
 
-  /**
-   * Constructor
-   */
-  constructor () {
-    super()
-    this.addSettings([
+  async initAsync() {
+    await super.initAsync()
+    await this.addSettings([
       {
         name: 'variant',
         type: 'enum',
@@ -102,6 +99,8 @@ export default class Base32Encoder extends Encoder {
         visible: false
       }
     ])
+
+    return this
   }
 
   /**

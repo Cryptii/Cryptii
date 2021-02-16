@@ -20,12 +20,9 @@ export default class RC4Encoder extends Encoder {
     return meta
   }
 
-  /**
-   * Constructor
-   */
-  constructor () {
-    super()
-    this.addSettings([
+  async initAsync() {
+    await super.initAsync()
+    await this.addSettings([
       {
         name: 'key',
         type: 'bytes',
@@ -44,6 +41,8 @@ export default class RC4Encoder extends Encoder {
         randomizable: false
       }
     ])
+
+    return this
   }
 
   /**

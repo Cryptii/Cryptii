@@ -39,12 +39,9 @@ export default class Ascii85Encoder extends Encoder {
     return meta
   }
 
-  /**
-   * Constructor
-   */
-  constructor () {
-    super()
-    this.addSetting({
+  async initAsync() {
+    await super.initAsync()
+    await this.addSetting({
       name: 'variant',
       type: 'enum',
       label: 'Variant',
@@ -53,6 +50,7 @@ export default class Ascii85Encoder extends Encoder {
       labels: variantSpecs.map(variant => variant.label),
       randomizable: false
     })
+    return this
   }
 
   /**

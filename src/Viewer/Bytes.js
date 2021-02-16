@@ -24,13 +24,10 @@ export default class BytesViewer extends Viewer {
     return meta
   }
 
-  /**
-   * Constructor
-   */
-  constructor () {
-    super()
+  async initAsync () {
+    await super.initAsync()
     this._viewPrototype = TextViewerView
-    this.addSettings([
+    await this.addSettings([
       {
         name: 'format',
         type: 'enum',
@@ -60,6 +57,8 @@ export default class BytesViewer extends Viewer {
         randomizable: false
       }
     ])
+
+    return this
   }
 
   /**

@@ -12,13 +12,11 @@ const BlockToCharacterMode = 1
  * @abstract
  */
 export default class CharacterBlockEncoder extends Encoder {
-  /**
-   * Constructor
-   */
-  constructor () {
-    super()
+  async initAsync() {
+    await super.initAsync()
     this._mode = CharacterToBlockMode
     this.registerSeparatorSetting()
+    return this
   }
 
   /**
@@ -47,8 +45,8 @@ export default class CharacterBlockEncoder extends Encoder {
    * @override
    * @return {CharacterBlockEncoder} Fluent interface
    */
-  registerSeparatorSetting () {
-    return this.addSetting({
+  async registerSeparatorSetting () {
+    return await this.addSetting({
       name: 'separator',
       type: 'text',
       value: ' ',

@@ -22,12 +22,9 @@ export default class PolybiusSquareEncoder extends Encoder {
     return meta
   }
 
-  /**
-   * Constructor
-   */
-  constructor () {
-    super()
-    this.addSettings([
+  async initAsync() {
+    await super.initAsync()
+    await this.addSettings([
       {
         name: 'alphabet',
         type: 'text',
@@ -83,6 +80,8 @@ export default class PolybiusSquareEncoder extends Encoder {
         falseLabel: 'Ignore'
       }
     ])
+
+    return this
   }
 
   /**

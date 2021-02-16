@@ -21,18 +21,15 @@ export default class HMACEncoder extends Encoder {
     return meta
   }
 
-  /**
-   * Constructor
-   */
-  constructor () {
-    super()
+  async initAsync () {
+    await super.initAsync()
     this.setEncodeOnly(true)
 
     // Create internal hash encoder instance
-    this._hashEncoder = new HashEncoder()
+    this._hashEncoder = await new HashEncoder().initAsync()
     const hashAlgorithmSetting = this._hashEncoder.getSetting('algorithm')
 
-    this.addSettings([
+    await this.addSettings([
       {
         name: 'key',
         type: 'bytes',
@@ -48,6 +45,8 @@ export default class HMACEncoder extends Encoder {
         style: 'radio'
       }
     ])
+
+    return this
   }
 
   /**
@@ -103,7 +102,7 @@ export default class HMACEncoder extends Encoder {
   async createDigest (name, message) {
     // Lazily create internal hash encoder instance
     if (this._hashEncoder === null) {
-      this._hashEncoder = new HashEncoder()
+      this._hashEncoder = await new HashEncoder().initAsync()
     }
 
     // Configure algorithm

@@ -25,12 +25,9 @@ export default class AlphabeticalSubstitutionEncoder extends Encoder {
     return meta
   }
 
-  /**
-   * Constructor
-   */
-  constructor () {
-    super()
-    this.addSettings([
+  async initAsync() {
+    await super.initAsync()
+    await this.addSettings([
       {
         name: 'plaintextAlphabet',
         type: 'text',
@@ -70,6 +67,8 @@ export default class AlphabeticalSubstitutionEncoder extends Encoder {
         randomizable: false
       }
     ])
+
+    return this
   }
 
   /**

@@ -36,12 +36,9 @@ export default class NihilistCipherEncoder extends Encoder {
     return meta
   }
 
-  /**
-   * Constructor
-   */
-  constructor () {
-    super()
-    this.addSettings([
+  async initAsync() {
+    await super.initAsync()
+    await this.addSettings([
       {
         name: 'alphabet',
         type: 'text',
@@ -71,7 +68,7 @@ export default class NihilistCipherEncoder extends Encoder {
     ])
 
     // Create internal Polybius square encoder instance
-    this._polybiusSquare = new PolybiusSquareEncoder()
+    this._polybiusSquare = await new PolybiusSquareEncoder().initAsync()
     this._polybiusSquare.setSettingValues({
       alphabet: alphabet,
       rows: '12345',
@@ -80,6 +77,8 @@ export default class NihilistCipherEncoder extends Encoder {
       caseSensitivity: false,
       includeForeignChars: false
     })
+
+    return this
   }
 
   /**
